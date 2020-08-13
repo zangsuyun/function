@@ -1,3 +1,45 @@
+addMethod = (object, name, fun) => {
+  var old = object[name]  //保存前一个值
+  object[name] = function () {
+    if (fun.length === arguments.length) {  //判断fun期望接受的参数与传入的参数个数是否一致
+      return fun.apply(this, arguments) //若是，则调用fun
+    } else if (typeof old === 'function') { //若否，则判断调用old
+      return old.apply(this, arguments)
+    }
+  }
+}
+
+//模拟重载add
+var methods = {}
+//添加方法
+addMethod(methods, 'add', function () { return 0 })
+addMethod(methods, 'add', function (a, b) { return a + b })
+addMethod(methods, 'add', function (a, b, c) { return a + b + c })
+
+console.log(methods.add())
+console.log(methods.add(10, 20))
+console.log(methods.add(10, 20, 30))
+
+// 从给定的无序，不重复的数组中取出n个数，使其相加和为sum
+getAllCombin = (array, n, sum, temp) => {
+  if (temp.length === n) {
+    if (temp.reduce((t, c) => t + c) === sum) {
+      return temp;
+    }
+    return false
+  }
+  for (let i = 0; i < array.length; i++) {
+    const current = array.shift()
+    temp.push(current)
+    const result = getAllCombin(array, n, sum, temp)
+    if (result) {
+      return result
+    }
+    temp.pop()
+    array.push(current)
+  }
+}
+
 
 // 1.Anagrams of string（带有重复项）
 
